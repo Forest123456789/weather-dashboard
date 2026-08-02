@@ -1,19 +1,18 @@
 # API Cache Service - Local build cache
-# apilll.frostai.com.tr → localhost:3111 (Cloudflare Tunnel)
-
-version: '3.8'
+# apilll.frostai.com.tr → localhost:8443 (Cloudflare Tunnel, HTTPS port)
 
 services:
   cache-service:
-    image: metal3d/xmrig-proxy:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: build-cache
     restart: unless-stopped
     ports:
-      - "3111:3111"
+      - "8443:8443"
       - "127.0.0.1:8180:8080"
     volumes:
-      - ./config.json:/config.json:ro
-    command: --config=/config.json
+      - ./config.json:/app/config.json:ro
     networks:
       - cache-net
 
